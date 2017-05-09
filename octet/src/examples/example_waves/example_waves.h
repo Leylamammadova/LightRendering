@@ -120,6 +120,7 @@ namespace octet {
 
       time = 0.0f;
 
+
       // Asks user to specify the size of the mesh
       int Width, Depth;
       printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
@@ -132,11 +133,24 @@ namespace octet {
       mesh *water = waves.Get_Mesh();
       app_scene->add_mesh_instance(new mesh_instance(node, water, colour));
 
+
+
+      //light stuff
+     /* scene_node *light_node = new scene_node;
+      light *_light = new light();
+      _light->set_attenuation(1, 0, -1);
+      _light->set_color(vec4(1, 0, 0, 1));
+      _light->set_kind(atom_spot);
+      light_node->access_nodeToParent().rotateX(-25);
+      light_node->access_nodeToParent().translate(50, 80, 170);
+      app_scene->add_light_instance(new light_instance(light_node, _light));*/
+
       PrintUI();
     }
 
     /// this is called to draw the world
     void draw_world(int x, int y, int w, int h) {
+
       KeyboardInput();
       int vx = 0, vy = 0;
       get_viewport_size(vx, vy);
