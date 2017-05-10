@@ -114,7 +114,7 @@ namespace octet {
 
       // init shaders
       param_shader *shader = new param_shader("shaders/default.vs", "shaders/simple_color.fs");
-      material *colour = new material(vec4(0, 0, 1, 1), shader);
+      material *colour = new material(vec4(1, 1, 1, 1), shader);
       scene_node *node = new scene_node();
       app_scene->add_child(node);
 
@@ -136,15 +136,22 @@ namespace octet {
 
 
       //light stuff
-     /* scene_node *light_node = new scene_node;
+      scene_node *light_node = new scene_node;
       light *_light = new light();
-      _light->set_attenuation(1, 0, -1);
-      _light->set_color(vec4(1, 0, 0, 1));
-      _light->set_kind(atom_spot);
-      light_node->access_nodeToParent().rotateX(-25);
-      light_node->access_nodeToParent().translate(50, 80, 170);
-      app_scene->add_light_instance(new light_instance(light_node, _light));*/
+      _light->set_attenuation(100, 0, -100);
+      _light->set_color(vec4(0, 1, 0, 1));//green for testing
+      _light->set_kind(atom_directional);
+      light_node->access_nodeToParent().rotateX(-45);
+      light_node->access_nodeToParent().translate(0, 50, 50);
+      app_scene->add_light_instance(new light_instance(light_node, _light));
 
+      //test reasons
+     /* material *yellow = new material(vec4(1, 1, 0, 1));
+      mat4t mat;
+      mat.loadIdentity();
+      mat.translate(0, 30, 50);
+      mesh_instance* mesh = app_scene->add_shape(mat, new mesh_box(vec3(50.5f, 10, 50)), yellow, false);
+*/
       PrintUI();
     }
 
