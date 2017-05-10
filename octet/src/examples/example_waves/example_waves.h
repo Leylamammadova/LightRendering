@@ -109,7 +109,7 @@ namespace octet {
       
       // init camera position
       mat4t &camera = app_scene->get_camera_instance(0)->get_node()->access_nodeToParent();
-      camera.translate(50, 80, 170);
+      camera.translate(50, 60, 170);
       camera.rotateX(-20);
 
       // init shaders
@@ -146,13 +146,13 @@ namespace octet {
       light_node->access_nodeToParent().translate(0, 50, 50);
       app_scene->add_light_instance(new light_instance(light_node, _light));
 
-      //test reasons
-     /* material *yellow = new material(vec4(1, 1, 0, 1));
+      //test reasons plank
+      material *white = new material(vec4(1, 1, 1, 1));
       mat4t mat;
       mat.loadIdentity();
-      mat.translate(0, 30, 50);
-      mesh_instance* mesh = app_scene->add_shape(mat, new mesh_box(vec3(50.5f, 10, 50)), yellow, false);
-*/
+      mat.translate(50, -50, 20);
+      mesh_instance* mesh = app_scene->add_shape(mat, new mesh_box(vec3(50, 1, 50)), white, false);
+
       PrintUI();
     }
 
