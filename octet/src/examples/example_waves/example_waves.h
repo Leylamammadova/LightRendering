@@ -122,13 +122,14 @@ namespace octet {
 
 
       // Asks user to specify the size of the mesh
-      int Width, Depth;
-      printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
-      printf("Please set the size of the mesh.\nWidth: ");
-      std::cin >> Width;
-      printf("Depth: ");
-      std::cin >> Depth;
-      waves.init(Width, Depth);
+      //int Width, Depth;
+      //printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+      //printf("Please set the size of the mesh.\nWidth: ");
+      //std::cin >> Width;
+      //printf("Depth: ");
+      //std::cin >> Depth;
+      //waves.init(Width, Depth);
+      waves.init(100, 100);
 
       mesh *water = waves.Get_Mesh();
       app_scene->add_mesh_instance(new mesh_instance(node, water, colour));
