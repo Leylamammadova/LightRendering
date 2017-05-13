@@ -425,7 +425,7 @@ namespace octet { namespace scene {
       }
 
       /// default light instance
-      if (light_instances.size() == 0) {
+  /*    if (light_instances.size() == 0) {
         scene_node *node = add_scene_node();
         light *_light = new light();
         light_instance *li = new light_instance();
@@ -437,7 +437,7 @@ namespace octet { namespace scene {
         li->set_node(node);
         li->set_light(_light);
         light_instances.push_back(li);
-      }
+      }*/
 
       if (!object_shader) {
         object_shader = new bump_shader();
