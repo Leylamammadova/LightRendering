@@ -139,8 +139,8 @@ namespace octet {
       //light stuff
       scene_node *light_node = new scene_node;
       light *_light = new light();
-      _light->set_attenuation(100, 0, -100);
-      _light->set_color(vec4(0, 1, 0, 1));//green for testing
+      _light->set_attenuation(1, 0, -1);
+      _light->set_color(vec4(0, 0, 1, 1));//blue for testing
       _light->set_kind(atom_directional);
       light_node->access_nodeToParent().rotateX(-45);
       light_node->access_nodeToParent().translate(0, 50, 50);
