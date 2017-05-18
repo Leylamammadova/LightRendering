@@ -6,6 +6,10 @@
 //
 
 #include "water_surface.h"
+#include "ObjReader.h"
+#include "plane_mesh.h"
+
+#include "entity.h"
 
 namespace octet {
   /// Scene containing a box with octet.
@@ -13,6 +17,7 @@ namespace octet {
     // scene for drawing box
     ref<visual_scene> app_scene;
     water_surface waves;
+    ObjReader reader;
     float time;
   public:
     /// this is called when we construct the class before everything is initialised.
@@ -100,7 +105,7 @@ namespace octet {
       printf("\n_____________________\n");
       printf("Width: %d\nDepth: %d\nWaveLength: %f\nAmplitude: %f\n", waves.GetMeshWidth(), waves.GetMeshDepth(), waves.GetWaveLength(), waves.GetAmplitude());
     }
-
+    entity test;
     /// this is called once OpenGL is initialized
     void app_init() {
       app_scene = new visual_scene();
@@ -112,11 +117,24 @@ namespace octet {
       camera.translate(50, 60, 170);
       camera.rotateX(-20);
 
+
+      //test = entity();
+      //test.init(10, 10, 10, 100, 100, 100);
+      //test.rotate(1, 0, 0, 1);
+
+      ref<mesh> teapot_mesh = ObjReader::load_mesh_file("cube.obj");
+      material *teapot_colour = new material(vec4(1, 1, 1, 1));
+      scene_node *teapot_node = new scene_node();
+      app_scene->add_child(teapot_node);
+      app_scene->add_mesh_instance(new mesh_instance(teapot_node, teapot_mesh, teapot_colour));
+      teapot_node->scale(vec3(10,10,10));
+
       // init shaders
       param_shader *shader = new param_shader("shaders/default.vs", "shaders/simple_color.fs");
       material *colour = new material(vec4(1, 1, 1, 1), shader);
       scene_node *node = new scene_node();
       app_scene->add_child(node);
+      node->set_enabled(false);
 
       time = 0.0f;
 
@@ -152,8 +170,9 @@ namespace octet {
       mat.loadIdentity();
       mat.translate(50, -50, 20);
       mesh_instance* mesh = app_scene->add_shape(mat, new mesh_box(vec3(50, 1, 50)), white, false);
+      mesh->get_node()->set_enabled(false);
 
-      PrintUI();
+      //PrintUI();
     }
 
     /// this is called to draw the world
@@ -167,10 +186,14 @@ namespace octet {
       // update matrices. assume 30 fps.
       app_scene->update(1.0f/30);
 
-      waves.AnimateWaves(time += 1.0f/30);
+      //waves.AnimateWaves(time += 1.0f/30);
 
       // draw the scene
       app_scene->render((float)vx / vy);
+
+
+      //mat4t &camera = app_scene->get_camera_instance(0)->get_node()->access_nodeToParent();
+      //test.render(camera);
     }
   };
 }
