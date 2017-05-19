@@ -111,26 +111,45 @@ namespace octet {
       cameraToWorld.loadIdentity();
       cameraToWorld.translate(0, 0, 20);
 
+      ////opengl light
+      glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE);
+      glEnable(GL_LIGHTING);
+      glEnable(GL_LIGHT0);
+      glEnable(GL_NORMALIZE); 
+
+      GLfloat AmbientLight[] = { 0.2f, 0.2f, 0.2f, 1.0f };
+      GLfloat DiffuseLight[] = { 0.8f, 0.8f, 0.8f, 1.0f };
+      GLfloat SpecularLight[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+      glLightfv(GL_LIGHT0, GL_AMBIENT, AmbientLight);
+      glLightfv(GL_LIGHT0, GL_DIFFUSE, DiffuseLight);
+      glLightfv(GL_LIGHT0, GL_SPECULAR, SpecularLight);
+
+      //light position
+      GLfloat LightPosition[] = { 20.5f, 20.5f, 0.0f, 1.0f };
+      glLightfv(GL_LIGHT0, GL_POSITION, LightPosition);
+  
+
       entity teapot;
       teapot.init(0, 0, 0, "wt_teapot.obj");
       teapot.scale(10, 10, 10);
       gameObjects.push_back(teapot);
-
+   
+    
       PrintUI();
     }
 
     /// this is called to draw the world
     void draw_world(int x, int y, int w, int h) {
+
       KeyboardInput();
       int vx = 0, vy = 0;
       get_viewport_size(vx, vy);
-
-
       glViewport(x, y, w, h);
 
       glEnable(GL_DEPTH_TEST);
       glClearColor(0.3f, 0.67f, 0.28f, 1);
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 
       // render all gameObjects
       for (entity object : gameObjects) {

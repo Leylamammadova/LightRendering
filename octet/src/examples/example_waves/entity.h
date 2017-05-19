@@ -91,6 +91,16 @@ namespace octet {
       glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
       glBindVertexArray(0);
 
+    //render opengl light
+      GLfloat mat_amb[] = { 0.0f, 0.0f, 0.0f, 1.0f };
+      GLfloat mat_diff[] = { 0.0f, 1.0f, 0.0f, 1.0f };
+      GLfloat mat_spec[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+
+      glMaterialfv(GL_FRONT, GL_AMBIENT, mat_amb);
+      glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diff);
+      glMaterialfv(GL_FRONT, GL_SPECULAR, mat_spec);
+      glMaterialf(GL_FRONT, GL_SHININESS, 60.0f);
+
     }
 
     bool &is_enabled() {
