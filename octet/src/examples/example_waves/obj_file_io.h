@@ -15,6 +15,12 @@ namespace octet {
       std::vector< float > normals;
     };
 
+    struct opengl_data {
+      std::vector<float> vertex_object;
+      std::vector<unsigned int> indices;
+      int * atributeSizes; // Size of the atribs in bytes in order. So vtx, normal etc == 3 * sizeof(float), 3 * sizeof(float) etc..
+    };
+
     std::string load_file(const char* file_path) {
       std::ifstream file(file_path);
       if (file.bad() || !file.is_open()) { return nullptr; }
@@ -95,8 +101,64 @@ namespace octet {
       return data;
     }
 
+    opengl_data parse_file_data(obj_data in_data) {
+      opengl_data out_data;
+      // Set the index from base 1 (obj format) to base 0 (opengl format)
+      for (int i = 0; i < in_data.vertexIndices.size(); i++) {
+        in_data.vertexIndices[i] -= 1;
+        in_data.uvIndices[i] -= 1;
+        in_data.normalIndices[i] -= 1;
+      }
+
+      for (int i = 0; i < in_data.vertexIndices.size(); i ++) {
+        // Construct element
+        std::vector<float> element;
+        element.push_back(in_data.vertices[ 3 * in_data.vertexIndices[i]     ]); // x
+        element.push_back(in_data.vertices[ 3 * in_data.vertexIndices[i] + 1 ]); // y
+        element.push_back(in_data.vertices[ 3 * in_data.vertexIndices[i] + 2 ]); // x
+        element.push_back(in_data.normals[  3 * in_data.normalIndices[i]     ]); // Norm vec for the above vertex
+        element.push_back(in_data.normals[  3 * in_data.normalIndices[i] + 1 ]);
+        element.push_back(in_data.normals[  3 * in_data.normalIndices[i] + 2 ]);
+
+        // Check if element already exsist in ouput,
+        unsigned int index;
+        if (is_element_in_object(element, out_data.vertex_object, index)) {
+          //  if true then look up the index of that element and add it to the new indices
+          out_data.indices.push_back(index);
+        }
+        else {
+          //  if false then add the new element to the output and look up it's location to update the indices
+          out_data.vertex_object.insert(out_data.vertex_object.end(), element.begin(), element.end());
+          out_data.indices.push_back(index);
+        }
+      }
+      return out_data;
+    }
 
 
+  private:
+    bool is_element_in_object(std::vector<float> element, std::vector<float> object, unsigned int &idx) {
+      unsigned int elementIdx = 0;
+      for (int i = 0; i < object.size(); i = i + element.size()) {
+        bool match = true;
+        for (int j = 0; j < element.size(); j++) {
+          if (element[j] != object[i + j]) {
+            match = false;
+            break; // Element in obj not the same as check element so break to skip to next element in object.
+          }
+
+        }
+
+        if (match) {
+          idx = elementIdx;
+          return true;
+        }
+
+        elementIdx++;
+      }
+      idx = elementIdx;
+      return false;
+    }
 
     //std::vector<float> load_file_vertdata(char* file_name) {
     //  std::vector<float> verticies;

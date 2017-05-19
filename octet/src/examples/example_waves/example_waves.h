@@ -112,7 +112,7 @@ namespace octet {
       cameraToWorld.translate(0, 0, 20);
 
       entity teapot;
-      teapot.init(0, 0, 0, "wt_teapot.obj");
+      teapot.init(0, 0, 0, "cube.obj");
       teapot.scale(10, 10, 10);
       gameObjects.push_back(teapot);
 
