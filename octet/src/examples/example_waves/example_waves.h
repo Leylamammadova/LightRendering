@@ -6,8 +6,6 @@
 //
 
 #include "water_surface.h"
-#include "ObjReader.h"
-#include "plane_mesh.h"
 
 #include "entity.h"
 
@@ -15,10 +13,13 @@ namespace octet {
   /// Scene containing a box with octet.
   class example_waves : public app {
     // scene for drawing box
-    ref<visual_scene> app_scene;
-    water_surface waves;
-    ObjReader reader;
-    float time;
+    //water_surface waves;
+    //float time;
+  private:
+
+    mat4t cameraToWorld;
+    std::vector<entity> gameObjects;
+
   public:
     /// this is called when we construct the class before everything is initialised.
     example_waves(int argc, char **argv) : app(argc, argv) {
@@ -30,54 +31,53 @@ namespace octet {
       }
 
       float increment = 1;
-      mat4t &camera = app_scene->get_camera_instance(0)->get_node()->access_nodeToParent();
       
       // Translate camera - X-axis
-      if (is_key_down('A')) { camera.translate(-increment, 0, 0); }
-      if (is_key_down('D')) { camera.translate(increment, 0, 0); }
+      if (is_key_down('A')) { cameraToWorld.translate(-increment, 0, 0); }
+      if (is_key_down('D')) { cameraToWorld.translate(increment, 0, 0); }
 
       // Translate camera - Y-axis
-      if (is_key_down('Q')) { camera.translate(0, increment, 0); }
-      if (is_key_down('E')) { camera.translate(0, -increment, 0); }
+      if (is_key_down('Q')) { cameraToWorld.translate(0, increment, 0); }
+      if (is_key_down('E')) { cameraToWorld.translate(0, -increment, 0); }
 
       // Translate camera - Z-axis
-      if (is_key_down('W')) { camera.translate(0, 0, -increment); }
-      if (is_key_down('S')) { camera.translate(0, 0, increment); }
+      if (is_key_down('W')) { cameraToWorld.translate(0, 0, -increment); }
+      if (is_key_down('S')) { cameraToWorld.translate(0, 0, increment); }
       
       // Rotate camera - X-axis
-      if (is_key_down('Z')) { camera.rotateX(increment); }
-      if (is_key_down('X')) { camera.rotateX(-increment); }
+      if (is_key_down('Z')) { cameraToWorld.rotateX(increment); }
+      if (is_key_down('X')) { cameraToWorld.rotateX(-increment); }
 
       // Rotate camera - Y axis
-      if (is_key_down('C')) { camera.rotateY(increment); }
-      if (is_key_down('V')) { camera.rotateY(-increment); }
+      if (is_key_down('C')) { cameraToWorld.rotateY(increment); }
+      if (is_key_down('V')) { cameraToWorld.rotateY(-increment); }
 
       // Rotate camera - Y axis
-      if (is_key_down('R')) { camera.rotateZ(increment); }
-      if (is_key_down('F')) { camera.rotateZ(-increment); }
+      if (is_key_down('R')) { cameraToWorld.rotateZ(increment); }
+      if (is_key_down('F')) { cameraToWorld.rotateZ(-increment); }
 
       // Adjust wave parameters
       // Wave length
-      if (is_key_going_down('1')) { 
-        waves.AdjustWaveLength(-increment);
-        PrintUI();
-      }
+      //if (is_key_going_down('1')) { 
+      //  waves.AdjustWaveLength(-increment);
+      //  PrintUI();
+      //}
 
-      if (is_key_going_down('2')) {
-        waves.AdjustWaveLength(increment);
-        PrintUI();
-      }
+      //if (is_key_going_down('2')) {
+      //  waves.AdjustWaveLength(increment);
+      //  PrintUI();
+      //}
 
-      // Amplitude
-      if (is_key_going_down('3')) {
-        waves.AdjustAmplitude(-0.25f);
-        PrintUI();
-      }
+      //// Amplitude
+      //if (is_key_going_down('3')) {
+      //  waves.AdjustAmplitude(-0.25f);
+      //  PrintUI();
+      //}
 
-      if (is_key_going_down('4')) {
-        waves.AdjustAmplitude(0.25f);
-        PrintUI();
-      }
+      //if (is_key_going_down('4')) {
+      //  waves.AdjustAmplitude(0.25f);
+      //  PrintUI();
+      //}
 
       // Set wireframe on or off
       static bool wireframe = false;
@@ -103,97 +103,39 @@ namespace octet {
       printf("Press V to rotate the camera right\n");
       printf("Press the space bar to toggle wireframe.");
       printf("\n_____________________\n");
-      printf("Width: %d\nDepth: %d\nWaveLength: %f\nAmplitude: %f\n", waves.GetMeshWidth(), waves.GetMeshDepth(), waves.GetWaveLength(), waves.GetAmplitude());
+      //printf("Width: %d\nDepth: %d\nWaveLength: %f\nAmplitude: %f\n", waves.GetMeshWidth(), waves.GetMeshDepth(), waves.GetWaveLength(), waves.GetAmplitude());
     }
-    entity test;
+
     /// this is called once OpenGL is initialized
     void app_init() {
-      app_scene = new visual_scene();
-      app_scene->create_default_camera_and_lights();
-      app_scene->get_camera_instance(0)->set_far_plane(1000000.0f);
-      
-      // init camera position
-      mat4t &camera = app_scene->get_camera_instance(0)->get_node()->access_nodeToParent();
-      camera.translate(50, 60, 170);
-      camera.rotateX(-20);
+      cameraToWorld.loadIdentity();
+      cameraToWorld.translate(0, 0, 20);
 
+      entity teapot;
+      teapot.init(0, 0, 0, "wt_teapot.obj");
+      teapot.scale(20, 20, 20);
+      gameObjects.push_back(teapot);
 
-      //test = entity();
-      //test.init(10, 10, 10, 100, 100, 100);
-      //test.rotate(1, 0, 0, 1);
-
-      ref<mesh> teapot_mesh = ObjReader::load_mesh_file("cube.obj");
-      material *teapot_colour = new material(vec4(1, 1, 1, 1));
-      scene_node *teapot_node = new scene_node();
-      app_scene->add_child(teapot_node);
-      app_scene->add_mesh_instance(new mesh_instance(teapot_node, teapot_mesh, teapot_colour));
-      teapot_node->scale(vec3(10,10,10));
-
-      // init shaders
-      param_shader *shader = new param_shader("shaders/default.vs", "shaders/simple_color.fs");
-      material *colour = new material(vec4(1, 1, 1, 1), shader);
-      scene_node *node = new scene_node();
-      app_scene->add_child(node);
-      node->set_enabled(false);
-
-      time = 0.0f;
-
-
-      // Asks user to specify the size of the mesh
-      //int Width, Depth;
-      //printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
-      //printf("Please set the size of the mesh.\nWidth: ");
-      //std::cin >> Width;
-      //printf("Depth: ");
-      //std::cin >> Depth;
-      //waves.init(Width, Depth);
-      waves.init(100, 100);
-
-      mesh *water = waves.Get_Mesh();
-      app_scene->add_mesh_instance(new mesh_instance(node, water, colour));
-
-
-
-      //light stuff
-      scene_node *light_node = new scene_node;
-      light *_light = new light();
-      _light->set_attenuation(1, 0, -1);
-      _light->set_color(vec4(0, 0, 1, 1));//blue for testing
-      _light->set_kind(atom_directional);
-      light_node->access_nodeToParent().rotateX(-90);
-      light_node->access_nodeToParent().translate(0, 50, 50);
-      app_scene->add_light_instance(new light_instance(light_node, _light));
-
-      //test reasons plank
-      material *white = new material(vec4(1, 1, 1, 1));
-      mat4t mat;
-      mat.loadIdentity();
-      mat.translate(50, -50, 20);
-      mesh_instance* mesh = app_scene->add_shape(mat, new mesh_box(vec3(50, 1, 50)), white, false);
-      mesh->get_node()->set_enabled(false);
-
-      //PrintUI();
+      PrintUI();
     }
 
     /// this is called to draw the world
     void draw_world(int x, int y, int w, int h) {
-
       KeyboardInput();
       int vx = 0, vy = 0;
       get_viewport_size(vx, vy);
-      app_scene->begin_render(vx, vy);
-
-      // update matrices. assume 30 fps.
-      app_scene->update(1.0f/30);
-
-      //waves.AnimateWaves(time += 1.0f/30);
-
-      // draw the scene
-      app_scene->render((float)vx / vy);
 
 
-      //mat4t &camera = app_scene->get_camera_instance(0)->get_node()->access_nodeToParent();
-      //test.render(camera);
+      glViewport(x, y, w, h);
+
+      glClearColor(0.3f, 0.67f, 0.28f, 1);
+      glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+      // render all gameObjects
+      for (entity object : gameObjects) {
+        object.render(cameraToWorld);
+      }
+
     }
   };
 }

@@ -1,7 +1,6 @@
 #pragma once
 
 namespace octet {
-
   std::string load_file(const char* file_path) {
     std::ifstream file(file_path);
     if (file.bad() || !file.is_open()) { return nullptr; }

@@ -429,6 +429,9 @@
     </ClInclude>
     <ClInclude Include="example_waves.h" />
     <ClInclude Include="water_surface.h" />
+    <ClInclude Include="plane_mesh.h" />
+    <ClInclude Include="entity.h" />
+    <ClInclude Include="obj_file_io.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\resources\mesh_builder.inl">
