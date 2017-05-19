@@ -12,7 +12,7 @@ namespace octet {
 
     GLuint VAO, VBO, EBO;
 
-    std::vector<unsigned int> indices;
+    std::vector<GLuint> indices;
 
     shader default_shader;
 
@@ -38,7 +38,10 @@ namespace octet {
     }
 
     void set_mesh_data(std::vector<float> &vertBuff, std::vector<unsigned int> &indiceseBuff) {
-      indices = indiceseBuff;
+      std::vector<GLuint>::iterator it;
+      for (it = indiceseBuff.begin(); it < indiceseBuff.end(); it++) {
+        indices.push_back(*it - 1);
+      }      
 
       glGenVertexArrays(1, &VAO);
       glGenBuffers(1, &VBO);
@@ -50,7 +53,7 @@ namespace octet {
       glBufferData(GL_ARRAY_BUFFER, vertBuff.size() * sizeof(GLfloat), &vertBuff[0], GL_STATIC_DRAW);
 
       glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-      glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), &indices[0], GL_STATIC_DRAW);
+      glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLuint), &indices[0], GL_STATIC_DRAW);
 
       glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (GLvoid*)0);
 
@@ -71,8 +74,6 @@ namespace octet {
       //mat4t modelToProjection = modelToWorld * worldToCamera * cameraToProjection;
 
       // Load object transform data to the shader
-
-
       glUseProgram(default_shader.get_program());
       glUniformMatrix4fv(modelToProjectionIndex_, 1, GL_FALSE, modelToProjection.get());
 

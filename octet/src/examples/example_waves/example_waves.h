@@ -113,7 +113,7 @@ namespace octet {
 
       entity teapot;
       teapot.init(0, 0, 0, "wt_teapot.obj");
-      teapot.scale(20, 20, 20);
+      teapot.scale(10, 10, 10);
       gameObjects.push_back(teapot);
 
       PrintUI();
