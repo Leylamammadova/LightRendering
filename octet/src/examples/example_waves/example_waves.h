@@ -11,11 +11,7 @@
 namespace octet {
   /// Scene containing a box with octet.
   class example_waves : public app {
-    // scene for drawing box
-    //water_surface waves;
-    //float time;
   private:
-
     mat4t cameraToWorld;
     std::vector<entity> gameObjects;
 
@@ -54,29 +50,6 @@ namespace octet {
       // Rotate camera - Y axis
       if (is_key_down('R')) { cameraToWorld.rotateZ(increment); }
       if (is_key_down('F')) { cameraToWorld.rotateZ(-increment); }
-
-      // Adjust wave parameters
-      // Wave length
-      //if (is_key_going_down('1')) { 
-      //  waves.AdjustWaveLength(-increment);
-      //  PrintUI();
-      //}
-
-      //if (is_key_going_down('2')) {
-      //  waves.AdjustWaveLength(increment);
-      //  PrintUI();
-      //}
-
-      //// Amplitude
-      //if (is_key_going_down('3')) {
-      //  waves.AdjustAmplitude(-0.25f);
-      //  PrintUI();
-      //}
-
-      //if (is_key_going_down('4')) {
-      //  waves.AdjustAmplitude(0.25f);
-      //  PrintUI();
-      //}
 
       // Set wireframe on or off
       static bool wireframe = false;
@@ -154,7 +127,6 @@ namespace octet {
       glEnable(GL_DEPTH_TEST);
       glClearColor(0.3f, 0.67f, 0.28f, 1);
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
 
       // render all gameObjects
       for (entity object : gameObjects) {
