@@ -1,5 +1,4 @@
 #pragma once
-#include "obj_file_io.h"
 namespace octet {
   /// Scene containing a box with octet.
 
@@ -26,22 +25,23 @@ namespace octet {
   public:
     entity() {}
 
-    void init(float x, float y, float z, char* mesh_file = NULL) {
+    void init(float x, float y, float z, std::string vertShader, std::string fragShader, std::vector<float> &vertBuff, std::vector<unsigned int> &indiceseBuff) {
       modelToWorld.loadIdentity();
       modelToWorld.translate(x, y, z);
 
       enabled = true;
 
-      obj_file_io file_reader;
-      std::string vertShader = file_reader.load_file("teapot.vs").c_str();
-      std::string fragShader = file_reader.load_file("teapot.fs").c_str();
+      //obj_file_io file_reader;
+      //std::string vertShader = file_reader.load_file("teapot.vs").c_str();
+      //std::string fragShader = file_reader.load_file("teapot.fs").c_str();
       default_shader.init(const_cast<char*>(vertShader.c_str()), const_cast<char*>(fragShader.c_str())); // loads, compiles and links our shader programs
       modelToProjectionIndex_ = glGetUniformLocation(default_shader.get_program(), "modelToProjection");
 
-      if (mesh_file != NULL) {
-        obj_file_io::opengl_data teapot_data = file_reader.parse_file_data(file_reader.load_mesh_file(mesh_file));
-        set_mesh_data(teapot_data.vertex_object, teapot_data.indices);
-      }
+      //if (mesh_file != NULL) {
+      //  obj_file_io::opengl_data teapot_data = file_reader.parse_file_data(file_reader.load_mesh_file(mesh_file));
+      //  set_mesh_data(teapot_data.vertex_object, teapot_data.indices);
+      //}
+      set_mesh_data(vertBuff, indiceseBuff);
     }
 
     void set_mesh_data(std::vector<float> &vertBuff, std::vector<unsigned int> &indiceseBuff) {

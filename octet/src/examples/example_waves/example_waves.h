@@ -5,9 +5,8 @@
 // Modular Framework for OpenGLES2 rendering on multiple platforms.
 //
 
-#include "water_surface.h"
-
 #include "entity.h"
+#include "obj_file_io.h"
 
 namespace octet {
   /// Scene containing a box with octet.
@@ -128,13 +127,19 @@ namespace octet {
       GLfloat LightPosition[] = { 20.5f, 20.5f, 0.0f, 1.0f };
       glLightfv(GL_LIGHT0, GL_POSITION, LightPosition);
   
+      // model loading
+      obj_file_io file_reader;
+      std::string vertShader = file_reader.load_file("teapot.vs").c_str();
+      std::string fragShader = file_reader.load_file("teapot.fs").c_str();
+      
+      obj_file_io::opengl_data teapot_data = file_reader.parse_file_data(file_reader.load_mesh_file("wt_teapot.obj"));
 
       entity teapot;
-      teapot.init(0, 0, 0, "wt_teapot.obj");
+      teapot.init(0, 0, 0, vertShader, fragShader, teapot_data.vertex_object, teapot_data.indices);
       teapot.scale(10, 10, 10);
+
       gameObjects.push_back(teapot);
    
-    
       PrintUI();
     }
 
