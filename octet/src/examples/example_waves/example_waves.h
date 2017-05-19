@@ -112,7 +112,7 @@ namespace octet {
       cameraToWorld.translate(0, 0, 20);
 
       entity teapot;
-      teapot.init(0, 0, 0, "cube.obj");
+      teapot.init(0, 0, 0, "wt_teapot.obj");
       teapot.scale(10, 10, 10);
       gameObjects.push_back(teapot);
 
@@ -128,6 +128,7 @@ namespace octet {
 
       glViewport(x, y, w, h);
 
+      glEnable(GL_DEPTH_TEST);
       glClearColor(0.3f, 0.67f, 0.28f, 1);
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 

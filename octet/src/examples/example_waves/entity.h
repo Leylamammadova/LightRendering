@@ -46,7 +46,7 @@ namespace octet {
 
     void set_mesh_data(std::vector<float> &vertBuff, std::vector<unsigned int> &indiceseBuff) {
       indices = indiceseBuff;
-      std::vector<GLuint>::iterator it;
+      //std::vector<GLuint>::iterator it;
    
 
       glGenVertexArrays(1, &VAO);
