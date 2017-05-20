@@ -85,10 +85,15 @@ namespace octet {
       GLint object_colour_loc = glGetUniformLocation(default_shader.get_program(), "object_colour_");
       GLint light_colour_loc = glGetUniformLocation(default_shader.get_program(), "light_colour_");
       GLint light_pos_loc = glGetUniformLocation(default_shader.get_program(), "light_pos_");
-      
+      GLint view_pos_loc = glGetUniformLocation(default_shader.get_program(), "view_pos_");
+      vec4 camera_pos_x(cameraToWorld.x());
+      vec4 camera_pos_y(cameraToWorld.y());
+      vec4 camera_pos_z(cameraToWorld.z());
+
       glUniform3f(object_colour_loc, 1.0f, 0.5f, 0.31f);
       glUniform3f(light_colour_loc, 1.0f, 0.5f, 1.0f);
       glUniform3f(light_pos_loc, light_pos_.x(), light_pos_.y(), light_pos_.z());
+      glUniform3f(view_pos_loc, camera_pos_x[0], camera_pos_y[1], camera_pos_z[2]);
 
       // Draw the polygon
       glBindVertexArray(VAO);
