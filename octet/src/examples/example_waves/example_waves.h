@@ -9,7 +9,7 @@
 
 // Gameobjects
 #include "entity.h"
-//#include "plane_mesh.h"
+#include "plane_mesh.h"
 
 namespace octet {
   /// Scene containing a box with octet.
@@ -127,8 +127,16 @@ namespace octet {
       cube.scale(10, 10, 10);
 
       gameObjects.push_back(cube);
+
+      // plane
+      plane_mesh plane_data;
+      entity plane;
+      plane.init(0, 0, 0, plane_data.get_vertex_shader(), plane_data.get_fragment_shader(), plane_data.get_vertices(), plane_data.get_indices());
+      plane.scale(10, 10, 10);
+
+      gameObjects.push_back(plane);
    
-      PrintUI();
+      //PrintUI();
     }
 
     /// this is called to draw the world

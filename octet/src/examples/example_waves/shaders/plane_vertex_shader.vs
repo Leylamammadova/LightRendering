@@ -1,7 +1,13 @@
-#version 330 core
+uniform mat4 modelToProjection;
 
-layout (location = 0) in vec3 pos;
+// attributes from vertex buffer
+attribute vec3 pos;
+attribute vec3 normal;
+
+// outputs
+varying vec3 normal_;
 
 void main() {
-  gl_Position = (pos, 1.0f);
+  gl_Position = modelToProjection * vec4(pos,1.0);
+  normal_ = normal;
 }
