@@ -23,34 +23,38 @@ namespace octet {
 
       // Calculating vertices and indices from:
       // http://stackoverflow.com/questions/10114577/a-method-for-indexing-triangles-from-a-loaded-heightmap
-      vertices.resize(size_x * size_y * 3);
-      for (int z = 0; z < size_y; ++z) {
-        for (int x = 0; x < size_x; ++x) {
+      int plane_width = size_x;
+      int plane_height = size_y;
+      vertices.resize(plane_width * plane_height * 3);
+      for (int z = 0; z < plane_height; ++z) {
+        for (int x = 0; x < plane_width; ++x) {
+          // Vertex Positions
           vertices.push_back(x);
           vertices.push_back(0.0f);
           vertices.push_back(z);
 
+          // Vertex Normals
           vertices.push_back(0.0f);
           vertices.push_back(1.0f);
           vertices.push_back(0.0f);
         }
       }
 
-      int grid_width = size_x - 1;
-      int grid_height = size_y - 1;
+      int grid_width = plane_width - 1;
+      int grid_height = plane_height - 1;
 
       indices.resize(grid_width * grid_height * 6);
       int i = 0;
       for (int z = 0; z < grid_height; ++z) {
         for (int x = 0; x < grid_width; ++x) {
-          int start = z * size_x + x;
+          int start = z * plane_width + x;
           indices[i] = start;
           indices[i + 1] = start + 1;
-          indices[i + 2] = start + size_x;
+          indices[i + 2] = start + plane_width;
 
           indices[i + 3] = start + 1;
-          indices[i + 4] = start + 1 + size_x;
-          indices[i + 5] = start + size_x;
+          indices[i + 4] = start + 1 + plane_width;
+          indices[i + 5] = start + plane_width;
           i += 6;
         } // end of for loop
       } // end of for loop

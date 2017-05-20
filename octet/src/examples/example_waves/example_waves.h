@@ -103,6 +103,9 @@ namespace octet {
       GLfloat LightPosition[] = { 20.5f, 20.5f, 0.0f, 1.0f };
       glLightfv(GL_LIGHT0, GL_POSITION, LightPosition);
   
+      //-----------------------------------------------------------------------
+      // ..:: GAME OBJECTS ::..
+      //-----------------------------------------------------------------------
       // teapot
       obj_file_io file_reader;
       std::string vertShader = file_reader.load_file("shaders/teapot.vs").c_str();
