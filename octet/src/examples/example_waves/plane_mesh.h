@@ -14,8 +14,8 @@ namespace octet {
     }
     
     void init(int size_x = 10, int size_y = 10, 
-      const char* vert_shader_loc = "shaders/plane_vertex_shader.vs", 
-      const char* frag_shader_loc = "shaders/plane_fragment_shader.fs") {
+      const char* vert_shader_loc = "shaders/plane.vs", 
+      const char* frag_shader_loc = "shaders/plane.fs") {
 
       obj_file_io file_reader;
       vertex_shader = file_reader.load_file(vert_shader_loc).c_str();

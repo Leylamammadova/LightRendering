@@ -108,20 +108,22 @@ namespace octet {
       //-----------------------------------------------------------------------
       // teapot
       obj_file_io file_reader;
-      std::string vertShader = file_reader.load_file("shaders/teapot.vs").c_str();
-      std::string fragShader = file_reader.load_file("shaders/teapot.fs").c_str();
-      
-      obj_file_io::opengl_data teapot_data = file_reader.parse_file_data(file_reader.load_mesh_file("wt_teapot.obj"));
+      std::string vertShader;
+      std::string fragShader;
+      //vertShader = file_reader.load_file("shaders/teapot.vs").c_str();
+      //fragShader = file_reader.load_file("shaders/teapot.fs").c_str();
+      //
+      //obj_file_io::opengl_data teapot_data = file_reader.parse_file_data(file_reader.load_mesh_file("wt_teapot.obj"));
 
-      entity teapot;
-      teapot.init(0, 0, 0, vertShader, fragShader, teapot_data.vertex_object, teapot_data.indices);
-      teapot.scale(10, 10, 10);
+      //entity teapot;
+      //teapot.init(0, 0, 0, vertShader, fragShader, teapot_data.vertex_object, teapot_data.indices);
+      //teapot.scale(10, 10, 10);
 
-      gameObjects.push_back(teapot);
+      //gameObjects.push_back(teapot);
 
       // Cube
-      vertShader = file_reader.load_file("shaders/teapot.vs").c_str();
-      fragShader = file_reader.load_file("shaders/teapot.fs").c_str();
+      vertShader = file_reader.load_file("shaders/light_source.vs").c_str();
+      fragShader = file_reader.load_file("shaders/light_source.fs").c_str();
 
       obj_file_io::opengl_data cube_data = file_reader.parse_file_data(file_reader.load_mesh_file("cube.obj"));
 

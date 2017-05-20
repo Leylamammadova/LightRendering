@@ -77,6 +77,12 @@ namespace octet {
       glUseProgram(default_shader.get_program());
       glUniformMatrix4fv(modelToProjectionIndex_, 1, GL_FALSE, modelToProjection.get());
 
+      // light uniforms
+      GLint object_colour_loc = glGetUniformLocation(default_shader.get_program(), "object_colour_");
+      GLint light_colour_loc = glGetUniformLocation(default_shader.get_program(), "light_colour_");
+      glUniform3f(object_colour_loc, 1.0f, 0.5f, 0.31f);
+      glUniform3f(light_colour_loc, 1.0f, 0.5f, 1.0f);
+
       // Draw the polygon
       glBindVertexArray(VAO);
       glEnableVertexAttribArray(attribute_pos); // replace with enable attribs function in future when more attribs are needed
