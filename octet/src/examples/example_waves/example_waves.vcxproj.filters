@@ -440,5 +440,7 @@
     <None Include="..\..\resources\resources.inl">
       <Filter>resources</Filter>
     </None>
+    <None Include="shaders\teapot.fs" />
+    <None Include="shaders\teapot.vs" />
   </ItemGroup>
 </Project>

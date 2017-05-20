@@ -12,7 +12,16 @@ namespace octet {
 
   private:
     mat4t modelToWorld;
-    GLuint modelToProjectionIndex_;
+     // modelToWorld * worldToCamera * cameraToProjection;
+    GLuint modelToWorldIndex_;
+    GLuint worldToCameraIndex_;
+    GLuint cameraToProjectionIndex_;
+
+    GLint object_colour_loc;
+
+    GLint light_colour_loc;
+    GLint light_pos_loc;
+    GLint view_pos_loc;
 
     bool enabled;
 
@@ -25,7 +34,7 @@ namespace octet {
     vec3 light_pos_;
 
   public:
-    entity() : light_pos_(1.0f, 1.0f, 1.0f) {}
+    entity() : light_pos_(15.0f, 20.0f, 10.0f) {}
 
     void init(float x, float y, float z, std::string vertShader, std::string fragShader, std::vector<float> &vertBuff, std::vector<unsigned int> &indiceseBuff) {
       modelToWorld.loadIdentity();
@@ -34,13 +43,19 @@ namespace octet {
       enabled = true;
 
       default_shader.init(const_cast<char*>(vertShader.c_str()), const_cast<char*>(fragShader.c_str())); // loads, compiles and links our shader programs
-      modelToProjectionIndex_ = glGetUniformLocation(default_shader.get_program(), "modelToProjection");
+      
+      modelToWorldIndex_ = glGetUniformLocation(default_shader.get_program(), "modelToWorld");
+      worldToCameraIndex_ = glGetUniformLocation(default_shader.get_program(), "worldToCamera");
+      cameraToProjectionIndex_ = glGetUniformLocation(default_shader.get_program(), "cameraToProjection");
+
+      object_colour_loc = glGetUniformLocation(default_shader.get_program(), "object_colour_");
+      light_colour_loc = glGetUniformLocation(default_shader.get_program(), "light_colour_");
+      light_pos_loc = glGetUniformLocation(default_shader.get_program(), "light_pos_");
+      view_pos_loc = glGetUniformLocation(default_shader.get_program(), "view_pos_");
 
       glGenVertexArrays(1, &VAO);
       glGenBuffers(1, &VBO);
       glGenBuffers(1, &EBO);
-
-      
 
       set_mesh_data(vertBuff, indiceseBuff);
 
@@ -66,39 +81,37 @@ namespace octet {
 
     void render(mat4t &cameraToWorld) {
       if (!is_enabled()) return;
-      mat4t modelToProjection = mat4t::build_projection_matrix(modelToWorld, cameraToWorld);
+      //mat4t modelToProjection = mat4t::build_projection_matrix(modelToWorld, cameraToWorld);
       //----------------------
-      //mat4t worldToCamera;
-      //cameraToWorld.invertQuick(worldToCamera);
+      // flip it around to transform from world to camera
+      mat4t worldToCamera;
+      cameraToWorld.invertQuick(worldToCamera);
 
-      //// build a projection matrix to add perspective
-      //mat4t cameraToProjection;
-      //cameraToProjection.loadIdentity();
-      //cameraToProjection.frustum(-4.0f, 4.0f, -3.0f, 3.0f, 0.1f, 10000.0f);
+      // build a projection matrix to add perspective
+      mat4t cameraToProjection;
+      cameraToProjection.loadIdentity();
+      cameraToProjection.frustum(-0.05f, 0.05f, -0.05f, 0.05f, 0.1f, 10000.0f);
+
       //mat4t modelToProjection = modelToWorld * worldToCamera * cameraToProjection;
 
       // Load object transform data to the shader
       glUseProgram(default_shader.get_program());
-      glUniformMatrix4fv(modelToProjectionIndex_, 1, GL_FALSE, modelToProjection.get());
+      glUniformMatrix4fv(modelToWorldIndex_, 1, GL_FALSE, modelToWorld.get());
+      glUniformMatrix4fv(worldToCameraIndex_, 1, GL_FALSE, worldToCamera.get());
+      glUniformMatrix4fv(cameraToProjectionIndex_, 1, GL_FALSE, cameraToProjection.get());
 
-      // light uniforms
-      GLint object_colour_loc = glGetUniformLocation(default_shader.get_program(), "object_colour_");
-      GLint light_colour_loc = glGetUniformLocation(default_shader.get_program(), "light_colour_");
-      GLint light_pos_loc = glGetUniformLocation(default_shader.get_program(), "light_pos_");
-      GLint view_pos_loc = glGetUniformLocation(default_shader.get_program(), "view_pos_");
-      vec4 camera_pos_x(cameraToWorld.x());
-      vec4 camera_pos_y(cameraToWorld.y());
-      vec4 camera_pos_z(cameraToWorld.z());
-
-      glUniform3f(object_colour_loc, 1.0f, 0.5f, 0.31f);
-      glUniform3f(light_colour_loc, 1.0f, 0.5f, 1.0f);
+      glUniform3f(object_colour_loc, 1.0f, 1.0f, 1.0f);
+      glUniform3f(light_colour_loc, 1.0f, 1.0f, 1.0f);
       glUniform3f(light_pos_loc, light_pos_.x(), light_pos_.y(), light_pos_.z());
-      glUniform3f(view_pos_loc, camera_pos_x[0], camera_pos_y[1], camera_pos_z[2]);
+      glUniform3f(view_pos_loc, cameraToWorld[3][0], cameraToWorld[3][1], cameraToWorld[3][2]);
 
       // Draw the polygon
       glBindVertexArray(VAO);
       glEnableVertexAttribArray(attribute_pos); // replace with enable attribs function in future when more attribs are needed
+      glEnableVertexAttribArray(attribute_normal);
       glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
+      glDisableVertexAttribArray(attribute_normal);
+      glDisableVertexAttribArray(attribute_pos);
       glBindVertexArray(0);
 
       ////render opengl light

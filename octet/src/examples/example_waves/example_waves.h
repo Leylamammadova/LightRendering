@@ -16,11 +16,20 @@ namespace octet {
   class example_waves : public app {
   private:
     mat4t cameraToWorld;
-    std::vector<entity> gameObjects;
+    std::vector<entity*> gameObjects;
+
+
+    entity* teapot;
 
   public:
     /// this is called when we construct the class before everything is initialised.
     example_waves(int argc, char **argv) : app(argc, argv) {
+    }
+
+    ~example_waves() {
+      for (entity* obj : gameObjects) {
+        delete obj;
+      }
     }
 
     void KeyboardInput() {
@@ -112,36 +121,33 @@ namespace octet {
       std::string fragShader;
 
       // Teapot
-      vertShader = file_reader.load_file("shaders/plane.vs").c_str();
-      fragShader = file_reader.load_file("shaders/plane.fs").c_str();
+      vertShader = file_reader.load_file("shaders/teapot.vs");
+      fragShader = file_reader.load_file("shaders/teapot.fs");
       
       obj_file_io::opengl_data teapot_data = file_reader.parse_file_data(file_reader.load_mesh_file("wt_teapot.obj"));
 
-      entity teapot;
-      teapot.init(0, 0, 0, vertShader, fragShader, teapot_data.vertex_object, teapot_data.indices);
-      teapot.scale(10, 10, 10);
-
+      teapot = new entity();
+      teapot->init(0, 0, 0, vertShader, fragShader, teapot_data.vertex_object, teapot_data.indices);
+      teapot->scale(10, 10, 10);
       gameObjects.push_back(teapot);
 
       // Cube
-      vertShader = file_reader.load_file("shaders/light_source.vs").c_str();
-      fragShader = file_reader.load_file("shaders/light_source.fs").c_str();
+      //vertShader = file_reader.load_file("shaders/light_source.vs").c_str();
+      //fragShader = file_reader.load_file("shaders/light_source.fs").c_str();
 
-      obj_file_io::opengl_data cube_data = file_reader.parse_file_data(file_reader.load_mesh_file("cube.obj"));
+      //obj_file_io::opengl_data cube_data = file_reader.parse_file_data(file_reader.load_mesh_file("cube.obj"));
 
-      entity cube;
-      cube.init(5, 5, 5, vertShader, fragShader, cube_data.vertex_object, cube_data.indices);
-      cube.scale(1, 1, 1);
-
-      gameObjects.push_back(cube);
+      //entity cube;
+      //cube.init(5, 5, 5, vertShader, fragShader, cube_data.vertex_object, cube_data.indices);
+      //cube.scale(1, 1, 1);
+      //gameObjects.push_back(cube);
 
       // Plane
-      plane_mesh plane_data;
-      entity plane;
-      plane.init(-20, -10, -10, plane_data.get_vertex_shader(), plane_data.get_fragment_shader(), plane_data.get_vertices(), plane_data.get_indices());
-      plane.scale(5, 5, 5);
-
-      gameObjects.push_back(plane);
+      //plane_mesh plane_data;
+      //entity plane;
+      //plane.init(-20, -10, -10, plane_data.get_vertex_shader(), plane_data.get_fragment_shader(), plane_data.get_vertices(), plane_data.get_indices());
+      //plane.scale(5, 5, 5);
+      //gameObjects.push_back(plane);
    
       //PrintUI();
     }
@@ -154,14 +160,17 @@ namespace octet {
       get_viewport_size(vx, vy);
       glViewport(x, y, w, h);
 
+
+      teapot->rotate(2, 0, 1, 0);
+
+
       glEnable(GL_DEPTH_TEST);
       glClearColor(0.3f, 0.67f, 0.28f, 1);
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-
       // render all gameObjects
-      for (entity object : gameObjects) {
-        object.render(cameraToWorld);
+      for (entity* object : gameObjects) {
+        object->render(cameraToWorld);
       }
 
     }

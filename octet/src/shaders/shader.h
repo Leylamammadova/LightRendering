@@ -38,6 +38,7 @@ namespace octet { namespace shaders {
       if (length) {
         fputs(buf, log("program errors during linking\n"));
         printf("program errors during linking: check log\n");
+        printf("%s", buf);
       } else {
         printf("linked ok\n");
       }
