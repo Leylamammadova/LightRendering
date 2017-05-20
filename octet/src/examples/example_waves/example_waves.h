@@ -5,8 +5,11 @@
 // Modular Framework for OpenGLES2 rendering on multiple platforms.
 //
 
-#include "entity.h"
 #include "obj_file_io.h"
+
+// Gameobjects
+#include "entity.h"
+//#include "plane_mesh.h"
 
 namespace octet {
   /// Scene containing a box with octet.
@@ -100,10 +103,10 @@ namespace octet {
       GLfloat LightPosition[] = { 20.5f, 20.5f, 0.0f, 1.0f };
       glLightfv(GL_LIGHT0, GL_POSITION, LightPosition);
   
-      // model loading
+      // teapot
       obj_file_io file_reader;
-      std::string vertShader = file_reader.load_file("teapot.vs").c_str();
-      std::string fragShader = file_reader.load_file("teapot.fs").c_str();
+      std::string vertShader = file_reader.load_file("shaders/teapot.vs").c_str();
+      std::string fragShader = file_reader.load_file("shaders/teapot.fs").c_str();
       
       obj_file_io::opengl_data teapot_data = file_reader.parse_file_data(file_reader.load_mesh_file("wt_teapot.obj"));
 
@@ -112,6 +115,18 @@ namespace octet {
       teapot.scale(10, 10, 10);
 
       gameObjects.push_back(teapot);
+
+      // Cube
+      vertShader = file_reader.load_file("shaders/teapot.vs").c_str();
+      fragShader = file_reader.load_file("shaders/teapot.fs").c_str();
+
+      obj_file_io::opengl_data cube_data = file_reader.parse_file_data(file_reader.load_mesh_file("cube.obj"));
+
+      entity cube;
+      cube.init(5, 5, 5, vertShader, fragShader, cube_data.vertex_object, cube_data.indices);
+      cube.scale(10, 10, 10);
+
+      gameObjects.push_back(cube);
    
       PrintUI();
     }
