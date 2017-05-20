@@ -124,15 +124,15 @@ namespace octet {
 
       entity cube;
       cube.init(5, 5, 5, vertShader, fragShader, cube_data.vertex_object, cube_data.indices);
-      cube.scale(10, 10, 10);
+      cube.scale(1, 1, 1);
 
       gameObjects.push_back(cube);
 
       // plane
       plane_mesh plane_data;
       entity plane;
-      plane.init(-20, 0, 0, plane_data.get_vertex_shader(), plane_data.get_fragment_shader(), plane_data.get_vertices(), plane_data.get_indices());
-      plane.scale(10, 10, 10);
+      plane.init(-20, -10, -10, plane_data.get_vertex_shader(), plane_data.get_fragment_shader(), plane_data.get_vertices(), plane_data.get_indices());
+      plane.scale(5, 5, 5);
 
       gameObjects.push_back(plane);
    
