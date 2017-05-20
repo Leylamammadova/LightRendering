@@ -31,27 +31,19 @@ namespace octet {
 
       enabled = true;
 
-      //obj_file_io file_reader;
-      //std::string vertShader = file_reader.load_file("teapot.vs").c_str();
-      //std::string fragShader = file_reader.load_file("teapot.fs").c_str();
       default_shader.init(const_cast<char*>(vertShader.c_str()), const_cast<char*>(fragShader.c_str())); // loads, compiles and links our shader programs
       modelToProjectionIndex_ = glGetUniformLocation(default_shader.get_program(), "modelToProjection");
-
-      //if (mesh_file != NULL) {
-      //  obj_file_io::opengl_data teapot_data = file_reader.parse_file_data(file_reader.load_mesh_file(mesh_file));
-      //  set_mesh_data(teapot_data.vertex_object, teapot_data.indices);
-      //}
-      set_mesh_data(vertBuff, indiceseBuff);
-    }
-
-    void set_mesh_data(std::vector<float> &vertBuff, std::vector<unsigned int> &indiceseBuff) {
-      indices = indiceseBuff;
-      //std::vector<GLuint>::iterator it;
-   
 
       glGenVertexArrays(1, &VAO);
       glGenBuffers(1, &VBO);
       glGenBuffers(1, &EBO);
+
+      set_mesh_data(vertBuff, indiceseBuff);
+
+    }
+
+    void set_mesh_data(std::vector<float> &vertBuff, std::vector<unsigned int> &indiceseBuff) {
+      indices = indiceseBuff;
 
       glBindVertexArray(VAO);
       glBindBuffer(GL_ARRAY_BUFFER, VBO);
@@ -91,7 +83,7 @@ namespace octet {
       glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
       glBindVertexArray(0);
 
-    //render opengl light
+      //render opengl light
       GLfloat mat_amb[] = { 0.0f, 0.0f, 0.0f, 1.0f };
       GLfloat mat_diff[] = { 0.0f, 1.0f, 0.0f, 1.0f };
       GLfloat mat_spec[] = { 1.0f, 1.0f, 1.0f, 1.0f };
