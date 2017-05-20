@@ -87,39 +87,41 @@ namespace octet {
       cameraToWorld.translate(0, 0, 20);
 
       ////opengl light
-      glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE);
-      glEnable(GL_LIGHTING);
-      glEnable(GL_LIGHT0);
-      glEnable(GL_NORMALIZE); 
+      //glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE);
+      //glEnable(GL_LIGHTING);
+      //glEnable(GL_LIGHT0);
+      //glEnable(GL_NORMALIZE); 
 
-      GLfloat AmbientLight[] = { 0.2f, 0.2f, 0.2f, 1.0f };
-      GLfloat DiffuseLight[] = { 0.8f, 0.8f, 0.8f, 1.0f };
-      GLfloat SpecularLight[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-      glLightfv(GL_LIGHT0, GL_AMBIENT, AmbientLight);
-      glLightfv(GL_LIGHT0, GL_DIFFUSE, DiffuseLight);
-      glLightfv(GL_LIGHT0, GL_SPECULAR, SpecularLight);
+      //GLfloat AmbientLight[] = { 0.2f, 0.2f, 0.2f, 1.0f };
+      //GLfloat DiffuseLight[] = { 0.8f, 0.8f, 0.8f, 1.0f };
+      //GLfloat SpecularLight[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+      //glLightfv(GL_LIGHT0, GL_AMBIENT, AmbientLight);
+      //glLightfv(GL_LIGHT0, GL_DIFFUSE, DiffuseLight);
+      //glLightfv(GL_LIGHT0, GL_SPECULAR, SpecularLight);
 
-      //light position
-      GLfloat LightPosition[] = { 20.5f, 20.5f, 0.0f, 1.0f };
-      glLightfv(GL_LIGHT0, GL_POSITION, LightPosition);
+      ////light position
+      //GLfloat LightPosition[] = { 20.5f, 20.5f, 0.0f, 1.0f };
+      //glLightfv(GL_LIGHT0, GL_POSITION, LightPosition);
   
       //-----------------------------------------------------------------------
       // ..:: GAME OBJECTS ::..
       //-----------------------------------------------------------------------
-      // teapot
+      
       obj_file_io file_reader;
       std::string vertShader;
       std::string fragShader;
-      //vertShader = file_reader.load_file("shaders/teapot.vs").c_str();
-      //fragShader = file_reader.load_file("shaders/teapot.fs").c_str();
-      //
-      //obj_file_io::opengl_data teapot_data = file_reader.parse_file_data(file_reader.load_mesh_file("wt_teapot.obj"));
 
-      //entity teapot;
-      //teapot.init(0, 0, 0, vertShader, fragShader, teapot_data.vertex_object, teapot_data.indices);
-      //teapot.scale(10, 10, 10);
+      // Teapot
+      vertShader = file_reader.load_file("shaders/plane.vs").c_str();
+      fragShader = file_reader.load_file("shaders/plane.fs").c_str();
+      
+      obj_file_io::opengl_data teapot_data = file_reader.parse_file_data(file_reader.load_mesh_file("wt_teapot.obj"));
 
-      //gameObjects.push_back(teapot);
+      entity teapot;
+      teapot.init(0, 0, 0, vertShader, fragShader, teapot_data.vertex_object, teapot_data.indices);
+      teapot.scale(10, 10, 10);
+
+      gameObjects.push_back(teapot);
 
       // Cube
       vertShader = file_reader.load_file("shaders/light_source.vs").c_str();
@@ -133,7 +135,7 @@ namespace octet {
 
       gameObjects.push_back(cube);
 
-      // plane
+      // Plane
       plane_mesh plane_data;
       entity plane;
       plane.init(-20, -10, -10, plane_data.get_vertex_shader(), plane_data.get_fragment_shader(), plane_data.get_vertices(), plane_data.get_indices());
@@ -155,6 +157,7 @@ namespace octet {
       glEnable(GL_DEPTH_TEST);
       glClearColor(0.3f, 0.67f, 0.28f, 1);
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 
       // render all gameObjects
       for (entity object : gameObjects) {

@@ -21,8 +21,6 @@ namespace octet {
       vertex_shader = file_reader.load_file(vert_shader_loc).c_str();
       fragment_shader = file_reader.load_file(frag_shader_loc).c_str();
 
-      // Calculating vertices and indices from:
-      // http://stackoverflow.com/questions/10114577/a-method-for-indexing-triangles-from-a-loaded-heightmap
       int plane_width = size_x;
       int plane_height = size_y;
       vertices.resize(plane_width * plane_height * 3);

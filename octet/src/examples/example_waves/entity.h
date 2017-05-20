@@ -21,9 +21,11 @@ namespace octet {
     std::vector<GLuint> indices;
 
     shader default_shader;
+    
+    vec3 light_pos_;
 
   public:
-    entity() {}
+    entity() : light_pos_(1.0f, 1.0f, 1.0f) {}
 
     void init(float x, float y, float z, std::string vertShader, std::string fragShader, std::vector<float> &vertBuff, std::vector<unsigned int> &indiceseBuff) {
       modelToWorld.loadIdentity();
@@ -37,6 +39,8 @@ namespace octet {
       glGenVertexArrays(1, &VAO);
       glGenBuffers(1, &VBO);
       glGenBuffers(1, &EBO);
+
+      
 
       set_mesh_data(vertBuff, indiceseBuff);
 
@@ -80,8 +84,11 @@ namespace octet {
       // light uniforms
       GLint object_colour_loc = glGetUniformLocation(default_shader.get_program(), "object_colour_");
       GLint light_colour_loc = glGetUniformLocation(default_shader.get_program(), "light_colour_");
+      GLint light_pos_loc = glGetUniformLocation(default_shader.get_program(), "light_pos_");
+      
       glUniform3f(object_colour_loc, 1.0f, 0.5f, 0.31f);
       glUniform3f(light_colour_loc, 1.0f, 0.5f, 1.0f);
+      glUniform3f(light_pos_loc, light_pos_.x(), light_pos_.y(), light_pos_.z());
 
       // Draw the polygon
       glBindVertexArray(VAO);
@@ -89,15 +96,15 @@ namespace octet {
       glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
       glBindVertexArray(0);
 
-      //render opengl light
-      GLfloat mat_amb[] = { 0.0f, 0.0f, 0.0f, 1.0f };
-      GLfloat mat_diff[] = { 0.0f, 1.0f, 0.0f, 1.0f };
-      GLfloat mat_spec[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+      ////render opengl light
+      //GLfloat mat_amb[] = { 0.0f, 0.0f, 0.0f, 1.0f };
+      //GLfloat mat_diff[] = { 0.0f, 1.0f, 0.0f, 1.0f };
+      //GLfloat mat_spec[] = { 1.0f, 1.0f, 1.0f, 1.0f };
 
-      glMaterialfv(GL_FRONT, GL_AMBIENT, mat_amb);
-      glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diff);
-      glMaterialfv(GL_FRONT, GL_SPECULAR, mat_spec);
-      glMaterialf(GL_FRONT, GL_SHININESS, 60.0f);
+      //glMaterialfv(GL_FRONT, GL_AMBIENT, mat_amb);
+      //glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diff);
+      //glMaterialfv(GL_FRONT, GL_SPECULAR, mat_spec);
+      //glMaterialf(GL_FRONT, GL_SHININESS, 60.0f);
 
     }
 
@@ -106,8 +113,8 @@ namespace octet {
     }
 
     // move the object
-    void translate(float x, float y) {
-      modelToWorld.translate(x, y, 0);
+    void translate(float x, float y, float z = 0) {
+      modelToWorld.translate(x, y, z);
     }
 
     void rotate(float angle) {
