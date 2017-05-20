@@ -26,6 +26,10 @@ namespace octet {
           vertices.push_back(x);
           vertices.push_back(0.0f);
           vertices.push_back(z);
+
+          vertices.push_back(0.0f);
+          vertices.push_back(1.0f);
+          vertices.push_back(0.0f);
         }
       }
 
