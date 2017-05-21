@@ -109,7 +109,7 @@ namespace octet {
       //glLightfv(GL_LIGHT0, GL_SPECULAR, SpecularLight);
 
       ////light position
-      //GLfloat LightPosition[] = { 20.5f, 20.5f, 0.0f, 1.0f };
+      //GLfloat LightPosition[] = { 0.5f, 0.5f, 0.0f, 1.0f };
       //glLightfv(GL_LIGHT0, GL_POSITION, LightPosition);
   
       //-----------------------------------------------------------------------
@@ -167,6 +167,10 @@ namespace octet {
       glEnable(GL_DEPTH_TEST);
       glClearColor(0.3f, 0.67f, 0.28f, 1);
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+      //enable alfa channel blend
+      glEnable(GL_BLEND);
+      glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 
       // render all gameObjects
       for (entity* object : gameObjects) {
