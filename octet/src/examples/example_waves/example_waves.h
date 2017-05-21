@@ -10,21 +10,27 @@
 // Gameobjects
 #include "entity.h"
 #include "plane_mesh.h"
+#include "Skybox.h"
 
 namespace octet {
   /// Scene containing a box with octet.
   class example_waves : public app {
+    sky_box sb;
+    GLuint frame_texture;
+    GLuint depth_render_buffer;
+    GLuint frame_buffer;
+    GLuint texture;
   private:
     mat4t cameraToWorld;
     std::vector<entity*> gameObjects;
-
 
     entity* teapot;
     entity* cube;
 
   public:
+
     /// this is called when we construct the class before everything is initialised.
-    example_waves(int argc, char **argv) : app(argc, argv) {
+    example_waves(int argc, char **argv) : app(argc, argv), sb(sky_box::get_sky_box()) {
     }
 
     ~example_waves() {
@@ -96,6 +102,10 @@ namespace octet {
       cameraToWorld.loadIdentity();
       cameraToWorld.translate(0, 5, 30);
 
+      sb.init();
+      generate_frame_buffer();
+
+
       ////opengl light
       //glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE);
       //glEnable(GL_LIGHTING);
@@ -152,8 +162,32 @@ namespace octet {
       //gameObjects.push_back(plane);
    
       //PrintUI();
+     
     }
+    void generate_frame_buffer() {
+      int w, h;
+      get_viewport_size(w, h);
+      glGenFramebuffers(1, &frame_buffer);
+      glBindFramebuffer(GL_FRAMEBUFFER, frame_buffer);
 
+      glGenTextures(1, &frame_texture);
+      glBindTexture(GL_TEXTURE_2D, frame_texture);
+      glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+      glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+      //glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE); // automatic mipmap
+      glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, w, h, 0, GL_RGBA, GL_BYTE, 0);
+
+      glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, frame_texture, 0);
+
+      glGenRenderbuffers(1, &depth_render_buffer);
+      glBindRenderbuffer(GL_RENDERBUFFER, depth_render_buffer);
+      glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, w, h);
+      glBindRenderbuffer(GL_RENDERBUFFER, 0);
+      glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depth_render_buffer);
+      GLenum res = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+      assert(res == GL_FRAMEBUFFER_COMPLETE);
+      glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    }
     /// this is called to draw the world
     void draw_world(int x, int y, int w, int h) {
 
@@ -164,16 +198,21 @@ namespace octet {
 
 
       //teapot->rotate(2, 0, 1, 0);
-      //cube->rotate(2,0,1,0);
-
+      //cube->rotate(2,0,1,0)
+      glEnable(GL_CULL_FACE);
+      glCullFace(GL_BACK);
 
       glEnable(GL_DEPTH_TEST);
-      glClearColor(0.3f, 0.67f, 0.28f, 1);
+      glClearColor(0, 0, 0, 1);
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
       //enable alfa channel blend
       glEnable(GL_BLEND);
       glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
+      
+      mat4t modelToWorld;
+      modelToWorld.loadIdentity();
+      mat4t modelToProjection = mat4t::build_projection_matrix(modelToWorld, cameraToWorld);
+      sb.render(modelToProjection,0);
 
       // render all gameObjects
       for (entity* object : gameObjects) {

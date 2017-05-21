@@ -432,6 +432,9 @@
     <ClInclude Include="plane_mesh.h" />
     <ClInclude Include="entity.h" />
     <ClInclude Include="obj_file_io.h" />
+    <ClInclude Include="Skybox.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\resources\mesh_builder.inl">
@@ -442,11 +445,5 @@
     </None>
     <None Include="shaders\teapot.fs" />
     <None Include="shaders\teapot.vs" />
-    <None Include="shaders\reflect.fs">
-      <Filter>Source Files</Filter>
-    </None>
-    <None Include="shaders\reflect.vs">
-      <Filter>Source Files</Filter>
-    </None>
   </ItemGroup>
 </Project>

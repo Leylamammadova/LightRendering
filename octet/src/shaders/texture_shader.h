@@ -6,8 +6,8 @@
 //
 // Single texture shader with no lighting
 
-namespace octet { namespace shaders {
-  class texture_shader : public shader {
+namespace octet {
+  class cubemap_shader : public shader {
     // indices to use with glUniform*()
 
     // index for model space to projection space matrix
@@ -22,14 +22,14 @@ namespace octet { namespace shaders {
       // it inputs pos and uv from each corner
       // it outputs gl_Position and uv_ to the rasterizer
       const char vertex_shader[] = SHADER_STR(
-        varying vec2 uv_;
+        varying vec3 srt_;
 
-        attribute vec4 pos;
-        attribute vec2 uv;
+      attribute vec4 pos;
+      attribute vec3 uv;
 
-        uniform mat4 modelToProjection;
+      uniform mat4 modelToProjection;
 
-        void main() { gl_Position = modelToProjection * pos; uv_ = uv; }
+      void main() { gl_Position = modelToProjection * pos; srt_ = uv; }
       );
 
       // this is the fragment shader
@@ -37,11 +37,11 @@ namespace octet { namespace shaders {
       // this is called for every fragment
       // it outputs gl_FragColor, the color of the pixel and inputs uv_
       const char fragment_shader[] = SHADER_STR(
-        varying vec2 uv_;
-        uniform sampler2D sampler;
-        void main() { gl_FragColor = texture2D(sampler, uv_) * vec4(1,1,1,1); }
+        varying vec3 srt_;
+      uniform samplerCube sampler;
+      void main() { gl_FragColor = textureCube(sampler, srt_); }
       );
-    
+
       // use the common shader code to compile and link the shaders
       // the result is a shader program
       shader::init(vertex_shader, fragment_shader);
@@ -60,4 +60,4 @@ namespace octet { namespace shaders {
       glUniformMatrix4fv(modelToProjectionIndex_, 1, GL_FALSE, modelToProjection.get());
     }
   };
-}}
+}
