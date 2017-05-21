@@ -28,8 +28,8 @@ namespace octet {
 
 
     bool enabled;
-    float shineDamper = 0;
-    float reflectivity = 0;
+    float shineDamper = 0.15;
+    float reflectivity = 0.15;
 
     // TODO: Move this to light class
     vec3 light_pos_;
