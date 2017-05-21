@@ -228,6 +228,8 @@
     <None Include="..\..\resources\resources.inl" />
     <None Include="shaders\teapot.fs" />
     <None Include="shaders\teapot.vs" />
+    <None Include="shaders\transparent.fs" />
+    <None Include="shaders\transparent.vs" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
