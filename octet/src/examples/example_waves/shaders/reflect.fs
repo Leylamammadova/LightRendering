@@ -22,6 +22,10 @@ void main()
 	float specular = max( dot( reflected_light, norm_vert_to_camera ), 0.0);
 	float damping = pow(specular, shineDamper);
 	vec3 specular_output = damping * reflectivity * light_colour_;
+  //refraction attempt 1
+  float ratio =1.00/1.52;
+  vec3 I = normalize(light_to_vert-vert_to_camera_);
+  vec3 R = refract(I,normalize(rel_normal_),ratio);
 
-    gl_FragColor = (vec4(diffuse, 1.0) * vec4(object_colour_,1.0)) + vec4(specular_output, 1.0);
+    gl_FragColor = (vec4(diffuse, R) * vec4(object_colour_,R)) + vec4(specular_output, R);
 }
