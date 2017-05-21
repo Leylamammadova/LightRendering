@@ -225,6 +225,8 @@
   <ItemGroup>
     <None Include="..\..\resources\mesh_builder.inl" />
     <None Include="..\..\resources\resources.inl" />
+    <None Include="shaders\reflect.fs" />
+    <None Include="shaders\reflect.vs" />
     <None Include="shaders\teapot.fs" />
     <None Include="shaders\teapot.vs" />
   </ItemGroup>

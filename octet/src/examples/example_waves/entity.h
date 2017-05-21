@@ -35,7 +35,7 @@ namespace octet {
     vec3 light_pos_;
 
   public:
-    entity() : light_pos_(150.0f, 200.0f, 100.0f) {}
+    entity() : light_pos_(-150.0f, 200.0f, 100.0f) {}
 
     void init(float x, float y, float z, std::string vertShader, std::string fragShader, std::vector<float> &vertBuff, std::vector<unsigned int> &indiceseBuff) {
       modelToWorld.loadIdentity();

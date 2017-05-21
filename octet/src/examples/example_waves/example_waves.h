@@ -20,6 +20,7 @@ namespace octet {
 
 
     entity* teapot;
+    entity* cube;
 
   public:
     /// this is called when we construct the class before everything is initialised.
@@ -93,7 +94,7 @@ namespace octet {
     /// this is called once OpenGL is initialized
     void app_init() {
       cameraToWorld.loadIdentity();
-      cameraToWorld.translate(0, 0, 20);
+      cameraToWorld.translate(0, 5, 30);
 
       ////opengl light
       //glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE);
@@ -121,8 +122,8 @@ namespace octet {
       std::string fragShader;
 
       // Teapot
-      vertShader = file_reader.load_file("shaders/teapot.vs");
-      fragShader = file_reader.load_file("shaders/teapot.fs");
+      vertShader = file_reader.load_file("shaders/solid.vs");
+      fragShader = file_reader.load_file("shaders/solid.fs");
       
       obj_file_io::opengl_data teapot_data = file_reader.parse_file_data(file_reader.load_mesh_file("wt_teapot.obj"));
 
@@ -132,15 +133,16 @@ namespace octet {
       gameObjects.push_back(teapot);
 
       // Cube
-      //vertShader = file_reader.load_file("shaders/light_source.vs").c_str();
-      //fragShader = file_reader.load_file("shaders/light_source.fs").c_str();
+      vertShader = file_reader.load_file("shaders/transparent.vs").c_str();
+      fragShader = file_reader.load_file("shaders/transparent.fs").c_str();
 
-      //obj_file_io::opengl_data cube_data = file_reader.parse_file_data(file_reader.load_mesh_file("cube.obj"));
+      obj_file_io::opengl_data cube_data = file_reader.parse_file_data(file_reader.load_mesh_file("cube.obj"));
 
-      //entity cube;
-      //cube.init(5, 5, 5, vertShader, fragShader, cube_data.vertex_object, cube_data.indices);
-      //cube.scale(1, 1, 1);
-      //gameObjects.push_back(cube);
+      cube = new entity();
+      cube->init(-5, 0, 20, vertShader, fragShader, cube_data.vertex_object, cube_data.indices);
+      cube->scale(10, 10, 10);
+      cube->rotate(45, 0, 1, 0);
+      gameObjects.push_back(cube);
 
       // Plane
       //plane_mesh plane_data;
@@ -161,7 +163,8 @@ namespace octet {
       glViewport(x, y, w, h);
 
 
-      teapot->rotate(2, 0, 1, 0);
+      //teapot->rotate(2, 0, 1, 0);
+      //cube->rotate(2,0,1,0);
 
 
       glEnable(GL_DEPTH_TEST);

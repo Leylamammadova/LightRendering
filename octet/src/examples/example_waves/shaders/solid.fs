@@ -28,4 +28,5 @@ void main()
 
 	vec3 result = (diffuse + specular_output) * object_colour_;
     gl_FragColor = vec4(result, 1.0);
+
 }
