@@ -3,12 +3,6 @@ namespace octet {
   /// Scene containing a box with octet.
 
   class entity {
-    struct Vertex {
-      vec3 pos;
-      vec2 uvs;
-      vec3 normals;
-    };
-
 
   private:
     mat4t modelToWorld;
@@ -19,22 +13,29 @@ namespace octet {
 
     GLint object_colour_loc;
 
+    GLint shineDamper_;
+    GLint reflectivity_;
+
     GLint light_colour_loc;
     GLint light_pos_loc;
     GLint view_pos_loc;
-
-    bool enabled;
 
     GLuint VAO, VBO, EBO;
 
     std::vector<GLuint> indices;
 
     shader default_shader;
-    
+
+
+    bool enabled;
+    float shineDamper = 0;
+    float reflectivity = 0;
+
+    // TODO: Move this to light class
     vec3 light_pos_;
 
   public:
-    entity() : light_pos_(15.0f, 20.0f, 10.0f) {}
+    entity() : light_pos_(150.0f, 200.0f, 100.0f) {}
 
     void init(float x, float y, float z, std::string vertShader, std::string fragShader, std::vector<float> &vertBuff, std::vector<unsigned int> &indiceseBuff) {
       modelToWorld.loadIdentity();
@@ -47,6 +48,9 @@ namespace octet {
       modelToWorldIndex_ = glGetUniformLocation(default_shader.get_program(), "modelToWorld");
       worldToCameraIndex_ = glGetUniformLocation(default_shader.get_program(), "worldToCamera");
       cameraToProjectionIndex_ = glGetUniformLocation(default_shader.get_program(), "cameraToProjection");
+
+      shineDamper_ = glGetUniformLocation(default_shader.get_program(), "shineDamper");
+      reflectivity_ = glGetUniformLocation(default_shader.get_program(), "reflectivity");
 
       object_colour_loc = glGetUniformLocation(default_shader.get_program(), "object_colour_");
       light_colour_loc = glGetUniformLocation(default_shader.get_program(), "light_colour_");
@@ -100,7 +104,10 @@ namespace octet {
       glUniformMatrix4fv(worldToCameraIndex_, 1, GL_FALSE, worldToCamera.get());
       glUniformMatrix4fv(cameraToProjectionIndex_, 1, GL_FALSE, cameraToProjection.get());
 
-      glUniform3f(object_colour_loc, 1.0f, 1.0f, 1.0f);
+      glUniform1f(shineDamper_, shineDamper);
+      glUniform1f(reflectivity_, reflectivity);
+
+      glUniform3f(object_colour_loc, 0.8f, 0.8f, 1.0f);
       glUniform3f(light_colour_loc, 1.0f, 1.0f, 1.0f);
       glUniform3f(light_pos_loc, light_pos_.x(), light_pos_.y(), light_pos_.z());
       glUniform3f(view_pos_loc, cameraToWorld[3][0], cameraToWorld[3][1], cameraToWorld[3][2]);
