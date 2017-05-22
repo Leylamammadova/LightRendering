@@ -119,7 +119,10 @@ namespace octet {
         element.push_back(in_data.normals[  3 * in_data.normalIndices[i]     ]); // Norm vec for the above vertex
         element.push_back(in_data.normals[  3 * in_data.normalIndices[i] + 1 ]);
         element.push_back(in_data.normals[  3 * in_data.normalIndices[i] + 2 ]);
-
+        if (in_data.uvs.size() != 0) {
+          element.push_back(in_data.uvs[2 * in_data.uvIndices[i]]); // u
+          element.push_back(in_data.uvs[2 * in_data.uvIndices[i] + 1]); // v
+        }
         // Check if element already exsist in ouput,
         unsigned int index;
         if (is_element_in_object(element, out_data.vertex_object, index)) {

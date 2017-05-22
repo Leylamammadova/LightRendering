@@ -72,10 +72,12 @@ namespace octet {
       glBindBuffer(GL_ARRAY_BUFFER, VBO);
       glBufferData(GL_ARRAY_BUFFER, vertBuff.size() * sizeof(GLfloat), &vertBuff[0], GL_STATIC_DRAW);
 
-      glVertexAttribPointer(attribute_pos, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)0);
+      glVertexAttribPointer(attribute_pos, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)0);
       glEnableVertexAttribArray(attribute_pos);
-      glVertexAttribPointer(attribute_normal, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
+      glVertexAttribPointer(attribute_normal, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
       glEnableVertexAttribArray(attribute_normal);
+      glVertexAttribPointer(attribute_uv, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)(6 * sizeof(GLfloat)));
+      glEnableVertexAttribArray(attribute_uv);
 
       glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
       glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), &indices[0], GL_STATIC_DRAW);
@@ -116,7 +118,9 @@ namespace octet {
       glBindVertexArray(VAO);
       glEnableVertexAttribArray(attribute_pos); // replace with enable attribs function in future when more attribs are needed
       glEnableVertexAttribArray(attribute_normal);
+      glEnableVertexAttribArray(attribute_uv);
       glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
+      glDisableVertexAttribArray(attribute_uv);
       glDisableVertexAttribArray(attribute_normal);
       glDisableVertexAttribArray(attribute_pos);
       glBindVertexArray(0);

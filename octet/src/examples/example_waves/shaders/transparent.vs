@@ -9,6 +9,7 @@ uniform vec3 view_pos_;
 // attributes from vertex buffer
 attribute vec3 pos;
 attribute vec3 normal;
+attribute vec2 tex_coord;
 
 // outputs
 varying vec3 rel_normal_;
@@ -18,7 +19,6 @@ varying vec3 world_pos;
 
 varying vec3 reflectedVector;
 varying vec3 refractedVector;
-
 
 void make_lighting() {
   vec4 world_pos = modelToWorld * vec4(pos, 1.0);
