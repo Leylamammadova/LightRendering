@@ -31,6 +31,6 @@ void main()
 
    vec4 color1 = textureCube(cube_texture,reflectedVector);
    vec4 color2 = textureCube(cube_texture,refractedVector);
-   vec4 color = mix(color1,color2, 0.5);
+   vec4 color = color1; //mix(color1,color2, 0.5);
     gl_FragColor = color;
 }

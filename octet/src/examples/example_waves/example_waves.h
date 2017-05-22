@@ -132,8 +132,8 @@ namespace octet {
       std::string fragShader;
 
       // Teapot
-      vertShader = file_reader.load_file("shaders/solid.vs");
-      fragShader = file_reader.load_file("shaders/solid.fs");
+      vertShader = file_reader.load_file("shaders/transparent.vs");
+      fragShader = file_reader.load_file("shaders/transparent.fs");
       
       obj_file_io::opengl_data teapot_data = file_reader.parse_file_data(file_reader.load_mesh_file("wt_teapot.obj"));
 
