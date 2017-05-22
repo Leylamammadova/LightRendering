@@ -26,6 +26,7 @@ namespace octet {
 
     entity* teapot;
     entity* teapot2;
+    entity* teapot3;
     entity* cube;
 
   public:
@@ -151,6 +152,15 @@ namespace octet {
       teapot2->init(20, 0, 0, vertShader, fragShader, teapot_data.vertex_object, teapot_data.indices);
       teapot2->scale(10, 10, 10);
       gameObjects.push_back(teapot2);
+
+      //third teapot
+      teapot3 = new entity();
+      vertShader = file_reader.load_file("shaders/transparent.vs");
+      fragShader = file_reader.load_file("shaders/mirrorwithlight.fs");
+
+      teapot3->init(40, 0, 0, vertShader, fragShader, teapot_data.vertex_object, teapot_data.indices);
+      teapot3->scale(10, 10, 10);
+      gameObjects.push_back(teapot3);
 
       // Cube
       //vertShader = file_reader.load_file("shaders/transparent.vs").c_str();
