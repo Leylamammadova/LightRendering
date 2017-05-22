@@ -149,7 +149,7 @@ namespace octet {
       obj_file_io::opengl_data cube_data = file_reader.parse_file_data(file_reader.load_mesh_file("cube.obj"));
 
       cube = new entity();
-      cube->init(-5, 0, -20, vertShader, fragShader, cube_data.vertex_object, cube_data.indices);
+      cube->init(-5, 0, 20, vertShader, fragShader, cube_data.vertex_object, cube_data.indices);
       cube->scale(10, 10, 10);
       cube->rotate(45, 0, 1, 0);
       gameObjects.push_back(cube);
