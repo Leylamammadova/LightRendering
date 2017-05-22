@@ -2,7 +2,6 @@ uniform mat4 modelToWorld;
 uniform mat4 worldToCamera;
 uniform mat4 cameraToProjection;
 
-
 uniform vec3 light_pos_;
 uniform vec3 view_pos_;
 

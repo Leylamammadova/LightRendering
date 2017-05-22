@@ -25,6 +25,7 @@ namespace octet {
     std::vector<entity*> gameObjects;
 
     entity* teapot;
+    entity* teapot2;
     entity* cube;
 
   public:
@@ -100,7 +101,7 @@ namespace octet {
     /// this is called once OpenGL is initialized
     void app_init() {
       cameraToWorld.loadIdentity();
-      cameraToWorld.translate(0, 5, 30);
+      cameraToWorld.translate(10, 5, 40);
 
       sb.init();
       generate_frame_buffer();
@@ -142,17 +143,26 @@ namespace octet {
       teapot->scale(10, 10, 10);
       gameObjects.push_back(teapot);
 
+      // Second Teapot
+      teapot2 = new entity();
+      vertShader = file_reader.load_file("shaders/transparent.vs");
+      fragShader = file_reader.load_file("shaders/mirror.fs");
+
+      teapot2->init(20, 0, 0, vertShader, fragShader, teapot_data.vertex_object, teapot_data.indices);
+      teapot2->scale(10, 10, 10);
+      gameObjects.push_back(teapot2);
+
       // Cube
-      vertShader = file_reader.load_file("shaders/transparent.vs").c_str();
-      fragShader = file_reader.load_file("shaders/transparent.fs").c_str();
+      //vertShader = file_reader.load_file("shaders/transparent.vs").c_str();
+      //fragShader = file_reader.load_file("shaders/transparent.fs").c_str();
 
-      obj_file_io::opengl_data cube_data = file_reader.parse_file_data(file_reader.load_mesh_file("cube.obj"));
+      //obj_file_io::opengl_data cube_data = file_reader.parse_file_data(file_reader.load_mesh_file("cube.obj"));
 
-      cube = new entity();
-      cube->init(-5, 0, 20, vertShader, fragShader, cube_data.vertex_object, cube_data.indices);
-      cube->scale(10, 10, 10);
-      cube->rotate(45, 0, 1, 0);
-      gameObjects.push_back(cube);
+      //cube = new entity();
+      //cube->init(-5, 0, 20, vertShader, fragShader, cube_data.vertex_object, cube_data.indices);
+      //cube->scale(10, 10, 10);
+      //cube->rotate(45, 0, 1, 0);
+      //gameObjects.push_back(cube);
 
       // Plane
       //plane_mesh plane_data;

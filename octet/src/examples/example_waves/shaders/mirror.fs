@@ -28,8 +28,5 @@ void main()
 
 	vec3 result = (diffuse + specular_output) * object_colour_;
 
-  vec4 color1 = textureCube(cube_texture,reflectedVector);
-  vec4 color2 = textureCube(cube_texture,refractedVector);
-  vec4 color = mix(color1,color2, 0.8);
-  gl_FragColor = color; 
+  gl_FragColor = textureCube(cube_texture,reflectedVector);
 }
