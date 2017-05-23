@@ -34,14 +34,16 @@ namespace octet {
       return out;
     }
 
-    obj_data load_mesh_file(char* file_name) {
+    opengl_data load_mesh_file(char* file_name) {
       obj_data data;
+      opengl_data output;
 
       FILE * file = fopen(file_name, "r");
       if (file == NULL) {
         printf("Impossible to open the file !\n");
-        return data;
+        return output;
       }
+      unsigned int currentIndex = 0;
       while (1) {
 
         char lineHeader[128];
@@ -79,26 +81,48 @@ namespace octet {
             if (matches != 6) {
               matches = fscanf(file, "%d/%d/ %d/%d/ %d/%d/\n", &vertexIndex[0], &uvIndex[0], &vertexIndex[1], &uvIndex[1], &vertexIndex[2], &uvIndex[2]);
               if (matches != 6) {
-                printf("File can't be read by our simple parser : ( Try exporting with other options\n");
-                return data;
+                printf("File can't be read by our simple parser : ( \n");
+                return output;
               }
             }
-            
           }
-          data.vertexIndices.push_back(vertexIndex[0]);
-          data.vertexIndices.push_back(vertexIndex[1]);
-          data.vertexIndices.push_back(vertexIndex[2]);
-          data.uvIndices.push_back(uvIndex[0]);
-          data.uvIndices.push_back(uvIndex[1]);
-          data.uvIndices.push_back(uvIndex[2]);
-          data.normalIndices.push_back(normalIndex[0]);
-          data.normalIndices.push_back(normalIndex[1]);
-          data.normalIndices.push_back(normalIndex[2]);
+          output.vertex_object.push_back(data.vertices[3 * (vertexIndex[0] - 1)    ]);
+          output.vertex_object.push_back(data.vertices[3 * (vertexIndex[0] - 1) + 1]);
+          output.vertex_object.push_back(data.vertices[3 * (vertexIndex[0] - 1) + 2]);
+          output.vertex_object.push_back(data.normals[3 * (normalIndex[0] - 1)    ]);
+          output.vertex_object.push_back(data.normals[3 * (normalIndex[0] - 1) + 1]);
+          output.vertex_object.push_back(data.normals[3 * (normalIndex[0] - 1) + 2]);
+          output.vertex_object.push_back(data.uvs[2 * (uvIndex[0] - 1)    ]);
+          output.vertex_object.push_back(data.uvs[2 * (uvIndex[0] - 1) + 1]);
+
+          output.indices.push_back(currentIndex++);
+
+          output.vertex_object.push_back(data.vertices[3 * (vertexIndex[1] - 1)    ]);
+          output.vertex_object.push_back(data.vertices[3 * (vertexIndex[1] - 1) + 1]);
+          output.vertex_object.push_back(data.vertices[3 * (vertexIndex[1] - 1) + 2]);
+          output.vertex_object.push_back(data.normals[3 * (normalIndex[1] - 1)    ]);
+          output.vertex_object.push_back(data.normals[3 * (normalIndex[1] - 1) + 1]);
+          output.vertex_object.push_back(data.normals[3 * (normalIndex[1] - 1) + 2]);
+          output.vertex_object.push_back(data.uvs[2 * (uvIndex[1] - 1)    ]);
+          output.vertex_object.push_back(data.uvs[2 * (uvIndex[1] - 1) + 1]);
+
+          output.indices.push_back(currentIndex++);
+
+          output.vertex_object.push_back(data.vertices[3 * (vertexIndex[2] - 1)    ]);
+          output.vertex_object.push_back(data.vertices[3 * (vertexIndex[2] - 1) + 1]);
+          output.vertex_object.push_back(data.vertices[3 * (vertexIndex[2] - 1) + 2]);
+          output.vertex_object.push_back(data.normals[3 * (normalIndex[2] - 1)    ]);
+          output.vertex_object.push_back(data.normals[3 * (normalIndex[2] - 1) + 1]);
+          output.vertex_object.push_back(data.normals[3 * (normalIndex[2] - 1) + 2]);
+          output.vertex_object.push_back(data.uvs[2 * (uvIndex[2] - 1)    ]);
+          output.vertex_object.push_back(data.uvs[2 * (uvIndex[2] - 1) + 1]);
+
+          output.indices.push_back(currentIndex++);
         }
 
       }
 
-      return data;
+      return output;
     }
 
     opengl_data parse_file_data(obj_data in_data) {

@@ -27,6 +27,13 @@ namespace octet {
     entity* teapot;
     entity* teapot2;
     entity* teapot3;
+
+    entity* bunny;
+
+    entity* dragon;
+
+    entity* idrimi;
+
     entity* cube;
 
   public:
@@ -137,7 +144,7 @@ namespace octet {
       vertShader = file_reader.load_file("shaders/transparent.vs");
       fragShader = file_reader.load_file("shaders/transparent.fs");
       
-      obj_file_io::opengl_data teapot_data = file_reader.parse_file_data(file_reader.load_mesh_file("wt_teapot.obj"));
+      obj_file_io::opengl_data teapot_data = file_reader.load_mesh_file("wt_teapot.obj");
 
       teapot = new entity();
       teapot->init(0, 0, 0, vertShader, fragShader, teapot_data.vertex_object, teapot_data.indices);
@@ -161,6 +168,23 @@ namespace octet {
       teapot3->init(40, 0, 0, vertShader, fragShader, teapot_data.vertex_object, teapot_data.indices);
       teapot3->scale(10, 10, 10);
       gameObjects.push_back(teapot3);
+
+      bunny = new entity();
+      vertShader = file_reader.load_file("shaders/transparent.vs").c_str();
+      fragShader = file_reader.load_file("shaders/transparent.fs").c_str();
+      obj_file_io::opengl_data bunny_data = file_reader.load_mesh_file("bunny.obj");
+      bunny->init(60, 0, 30, vertShader, fragShader, bunny_data.vertex_object, bunny_data.indices);
+      bunny->scale(6, 6, 6);
+      gameObjects.push_back(bunny);
+
+      dragon = new entity();
+      vertShader = file_reader.load_file("shaders/transparent.vs").c_str();
+      fragShader = file_reader.load_file("shaders/mirror.fs").c_str();
+      obj_file_io::opengl_data dragon_data = file_reader.load_mesh_file("dragon.obj");
+      dragon->init(-100, 0, 50, vertShader, fragShader, dragon_data.vertex_object, dragon_data.indices);
+      dragon->scale(6, 6, 6);
+      dragon->rotate(90, 0, 1, 0);
+      gameObjects.push_back(dragon);
 
       // Cube
       //vertShader = file_reader.load_file("shaders/transparent.vs").c_str();
@@ -233,6 +257,10 @@ namespace octet {
       modelToWorld.loadIdentity();
       mat4t modelToProjection = mat4t::build_projection_matrix(modelToWorld, cameraToWorld);
       sb.render(modelToProjection,0);
+
+      teapot->rotate(1 ,0,1,0);
+      teapot2->rotate(2, 0, 1, 0);
+      teapot3->rotate(4, 0, 1, 0);
 
       // render all gameObjects
       for (entity* object : gameObjects) {
